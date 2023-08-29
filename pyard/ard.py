@@ -66,7 +66,7 @@ class ARD(object):
     """
     ARD reduction for HLA
     Allows reducing alleles, allele code(MAC), Serology to
-    G, lg, lgx, W, exon, S and U2 levels.
+    G, lg, lgx, W, T, exon, S and U2 levels.
     """
 
     def __init__(
@@ -230,6 +230,8 @@ class ARD(object):
                 )
             else:
                 return allele
+        elif redux_type == "T" and allele in self.ars_mappings.t_group:
+            return self.ars_mappings.t_group[allele]
         elif redux_type == "exon":
             if allele in self.ars_mappings.exon_group:
                 exon_group_allele = self.ars_mappings.exon_group[allele]

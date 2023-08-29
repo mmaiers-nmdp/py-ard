@@ -93,6 +93,15 @@ def get_P_name(a: str) -> str:
     return ":".join(a.split(":")[0:2]) + "P"
 
 
+# computes a valid T name based on the ambiguity string
+def get_T_name(a: str) -> str:
+    a = a.split("/")[0]
+    last_char = a[-1]
+    if last_char in expression_chars:
+        a = a[:-1]
+    return a + "T"
+
+
 def get_imgt_db_versions() -> List[str]:
     import urllib.request
     import json

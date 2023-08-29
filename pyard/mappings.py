@@ -26,6 +26,7 @@ ars_mapping_tables = [
     "dup_lgx",
     "g_group",
     "p_group",
+    "t_group",
     "lgx_group",
     "exon_group",
     "p_not_g",

@@ -30,6 +30,7 @@ from . import db, broad_splits
 from .load import (
     load_g_group,
     load_p_group,
+    load_t_group,
     load_allele_list,
     load_serology_mappings,
     load_latest_version,
@@ -78,6 +79,7 @@ def generate_ard_mapping(db_connection: sqlite3.Connection, imgt_version) -> ARS
 
     df_g_group = load_g_group(imgt_version)
     df_p_group = load_p_group(imgt_version)
+    df_t_group = load_t_group(imgt_version)
 
     # compare df_p_group["2d"] with df_g_group["2d"] to find 2-field alleles in the
     # P-group that aren't in the G-group
@@ -143,6 +145,15 @@ def generate_ard_mapping(db_connection: sqlite3.Connection, imgt_version) -> ARS
     )
     p_group = df_p.set_index("A")["P"].to_dict()
 
+    # Extract T group mapping
+    df_t = pd.concat(
+        [
+            df_t_group[["A", "T"]],
+        ],
+        ignore_index=True,
+    )
+    t_group = df_t.set_index("A")["T"].to_dict()
+
     # Extract lgx group mapping
     df_lgx = pd.concat(
         [
@@ -166,6 +177,7 @@ def generate_ard_mapping(db_connection: sqlite3.Connection, imgt_version) -> ARS
         dup_lgx=dup_lgx,
         g_group=g_group,
         p_group=p_group,
+        t_group=t_group,
         lgx_group=lgx_group,
         exon_group=exon_group,
         p_not_g=p_not_g,

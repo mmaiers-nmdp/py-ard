@@ -450,6 +450,7 @@ def load_ars_mappings(db_connection):
     )
     g_group = load_dict(db_connection, table_name="g_group", columns=("allele", "g"))
     p_group = load_dict(db_connection, table_name="p_group", columns=("allele", "p"))
+    t_group = load_dict(db_connection, table_name="t_group", columns=("allele", "t"))
     lgx_group = load_dict(
         db_connection, table_name="lgx_group", columns=("allele", "lgx")
     )
@@ -462,6 +463,7 @@ def load_ars_mappings(db_connection):
         dup_lgx=dup_lgx,
         g_group=g_group,
         p_group=p_group,
+        t_group=t_group,
         lgx_group=lgx_group,
         exon_group=exon_group,
         p_not_g=p_not_g,
@@ -498,6 +500,12 @@ def save_ars_mappings(db_connection: sqlite3.Connection, ars_mapping: ARSMapping
         table_name="p_group",
         dictionary=ars_mapping.p_group,
         columns=("allele", "p"),
+    )
+    save_dict(
+        db_connection,
+        table_name="t_group",
+        dictionary=ars_mapping.t_group,
+        columns=("allele", "t"),
     )
     save_dict(
         db_connection,

@@ -23,7 +23,13 @@ import sys
 from typing import Dict, List
 from urllib.error import URLError
 
-from pyard.misc import get_G_name, get_2field_allele, get_3field_allele, get_P_name
+from pyard.misc import (
+    get_G_name,
+    get_2field_allele,
+    get_3field_allele,
+    get_P_name,
+    get_T_name,
+)
 
 # GitHub URL where IMGT HLA files are downloaded.
 IMGT_HLA_URL = "https://raw.githubusercontent.com/ANHIG/IMGTHLA/"
@@ -126,6 +132,32 @@ def load_p_group(imgt_version):
     # lgx has the P-group name without the P for comparison
     df_p["lgx"] = df_p["P"].apply(get_2field_allele)
     return df_p
+
+
+def load_t_group(imgt_version):
+    import pandas as pd
+
+    # load the hla_nom_t.txt
+    t_file = "gfe/hla_nom_t.txt"
+    try:
+        df = pd.read_csv(
+            t_file, skiprows=4, names=["Locus", "A", "T"], sep=";"
+        ).dropna()
+    except URLError as e:
+        print(f"Error opening {t_file}", e, file=sys.stderr)
+        sys.exit(1)
+
+    # the G-group is named for its first allele
+    df["T"] = df["A"].apply(get_T_name)
+    # convert slash delimited string to a list
+    df["A"] = df["A"].apply(lambda a: a.split("/"))
+    # convert the list into separate rows for each element
+    df = df.explode("A")
+    #  A*   + 02:01   = A*02:01
+    df["A"] = df["Locus"] + df["A"]
+    df["T"] = df["Locus"] + df["T"]
+
+    return df
 
 
 def load_allele_list(imgt_version):

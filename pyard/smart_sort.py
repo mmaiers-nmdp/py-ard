@@ -26,7 +26,7 @@ import re
 
 from pyard import constants
 
-expr_regex = re.compile("[PNQLSGg]")
+expr_regex = re.compile("[TPNQLSGg]")
 glstring_chars = re.compile("[/|+^~]")
 
 
